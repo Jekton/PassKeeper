@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jekton.passkeeper.R;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     private ListView mListView;
     private PasswordListAdapter mListAdapter;
 
+    private List<Pair<String, String>> mPasswords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +79,20 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
         mListView = findViewById(R.id.password_list);
         mListAdapter = new PasswordListAdapter(this);
         mListView.setAdapter(mListAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Pair<String, String> pair = mPasswords.get(position);
+                PasswordItemActivity.startActivity(MainActivity.this, pair.first, pair.second);
+            }
+        });
     }
 
 
     @Override
     public void onPasswordChanged(List<Pair<String, String>> passwords) {
-        Log.e(TAG, "onPasswordChanged: ");
-        mListAdapter.setPasswords(passwords);
+        mPasswords = passwords;
+        mListAdapter.setPasswords(mPasswords);
     }
 
 
