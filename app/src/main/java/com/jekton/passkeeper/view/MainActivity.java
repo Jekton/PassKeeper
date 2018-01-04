@@ -8,7 +8,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.jekton.passkeeper.R;
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         init();
     }
 
@@ -38,6 +44,23 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
         if (checkPermission()) {
             onPermissionGranted();
         }
+    }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_add_item) {
+            Log.e(TAG, "onOptionsItemSelected: ");
+            return true;
+        }
+        return false;
     }
 
 
