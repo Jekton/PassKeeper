@@ -16,9 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jekton.passkeeper.R;
 import com.jekton.passkeeper.password.PasswordManager;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     private PasswordListAdapter mListAdapter;
 
     private List<Pair<String, String>> mPasswords;
+    private boolean mStopped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,27 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     protected void onPause() {
         super.onPause();
         PasswordManager.getInstance().setListener(null);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        PasswordManager.getInstance().storePasswords();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mStopped = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mStopped = true;
+        PasswordManager.getInstance().storePasswords();
     }
 
 
@@ -98,25 +122,29 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
 
     @Override
     public void onLoadPasswordSuccess() {
-        Log.e(TAG, "onLoadPasswordSuccess: ");
+        // nop
     }
 
 
     @Override
     public void onLoadPasswordFail() {
-        Log.e(TAG, "onLoadPasswordFail: ");
+        Toast.makeText(this, R.string.activity_main_msg_load_fail,
+                Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void onStorePasswordSuccess() {
-        Log.e(TAG, "onStorePasswordSuccess: ");
+        if (mStopped) {
+            System.exit(0);
+        }
     }
 
 
     @Override
     public void onStorePasswordFail() {
-        Log.e(TAG, "onStorePasswordFail: ");
+        Toast.makeText(this, R.string.activity_main_msg_store_fail,
+                Toast.LENGTH_SHORT).show();
     }
 
 

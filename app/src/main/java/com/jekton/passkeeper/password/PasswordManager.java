@@ -104,6 +104,7 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
                 mListener.onStorePasswordSuccess();
             } else {
                 mListener.onStorePasswordFail();
+                // FIXME: 04/01/2018 what should we do?
             }
         }
     }

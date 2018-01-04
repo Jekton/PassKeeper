@@ -2,6 +2,9 @@
     <string name="app_name">PassKeeper</string>
 
     <string name="activity_main_menu_add">Add item</string>
+    <string name="activity_main_msg_load_fail">Fail to laod passwords</string>
+    <string name="activity_main_msg_store_fail">Fail to store passwords</string>
+
 
     <string name="activity_password_item_key">Key: </string>
     <string name="activity_password_item_password">Password: </string>
