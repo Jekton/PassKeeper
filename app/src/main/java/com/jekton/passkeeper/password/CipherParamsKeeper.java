@@ -11,6 +11,10 @@ import java.security.NoSuchAlgorithmException;
 
 class CipherParamsKeeper {
 
+    static {
+        System.loadLibrary("pwdkeeper");
+    }
+
     public static native byte[] getIv();
 
 
