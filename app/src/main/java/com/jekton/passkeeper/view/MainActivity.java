@@ -1,6 +1,11 @@
 package com.jekton.passkeeper.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,21 +32,19 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkPermission()) {
+            onPermissionGranted();
+        }
+    }
+
+
     private void init() {
         mListView = findViewById(R.id.password_list);
         mListAdapter = new PasswordListAdapter(this);
         mListView.setAdapter(mListAdapter);
-
-        PasswordManager manager = PasswordManager.getInstance();
-        manager.setListener(this);
-        manager.setPassword("123456");
-        manager.loadPasswords();
-        manager.addPassword("foo", "123");
-        manager.addPassword("bar", "876");
-        manager.removePassword("foo");
-        manager.addPassword("bar", "fdsfdsf");
-        manager.addPassword("bar2", "fdsfdsf");
-        manager.addPassword("bar3", "fdsfdsf");
     }
 
 
@@ -73,5 +76,68 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     @Override
     public void onStorePasswordFail() {
         Log.e(TAG, "onStorePasswordFail: ");
+    }
+
+
+    private boolean hasPermission(String permission) {
+        return ContextCompat.checkSelfPermission(this, permission)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    private boolean checkPermission() {
+        boolean canRead = hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        boolean canWrite = hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        String[] permissons;
+        if (!canRead && !canWrite) {
+            permissons = new String[2];
+            permissons[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            permissons[1] = Manifest.permission.READ_EXTERNAL_STORAGE;
+        } else if (!canRead) {
+            permissons = new String[1];
+            permissons[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
+        } else if (!canWrite) {
+            permissons = new String[1];
+            permissons[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        } else {
+            return true;
+        }
+
+        ActivityCompat.requestPermissions(this, permissons, 0);
+        return false;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        boolean fail = false;
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                fail = true;
+                break;
+            }
+        }
+        if (fail) {
+            finish();
+        } else {
+            onPermissionGranted();
+        }
+    }
+
+
+    private void onPermissionGranted() {
+        PasswordManager manager = PasswordManager.getInstance();
+        manager.setListener(this);
+        manager.setPassword("123456");
+        manager.loadPasswords();
+//        manager.addPassword("foo", "123");
+//        manager.addPassword("bar", "876");
+//        manager.removePassword("foo");
+//        manager.addPassword("bar", "fdsfdsf");
+//        manager.addPassword("bar2", "fdsfdsf");
+//        manager.addPassword("bar3", "fdsfdsf");
+//        manager.storePasswords();
     }
 }
