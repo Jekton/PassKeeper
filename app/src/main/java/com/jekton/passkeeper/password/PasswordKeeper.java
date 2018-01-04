@@ -59,13 +59,7 @@ class PasswordKeeper {
         byte[] encrypt = CipherUtil.encrypt(data.getBytes(Charset.forName("UTF-8")),
                                             CipherParamsKeeper.getKey(mPassword),
                                             CipherParamsKeeper.getIv());
-        boolean success = FileUtil.writeFile(mPasswordFile, encrypt);
-        if (success) {
-            mPasswords.clear();
-            mListener.onPasswordChanged(mPasswords);
-        }
-
-        return success;
+        return FileUtil.writeFile(mPasswordFile, encrypt);
     }
 
 
