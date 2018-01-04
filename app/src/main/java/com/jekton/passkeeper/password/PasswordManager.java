@@ -36,6 +36,7 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     private PasswordKeeper mPasswordKeeper;
     private PasswordListener mListener;
 
+    private boolean mDataLoaded;
     private List<Pair<String, String>> mPasswords;
 
 
@@ -59,12 +60,13 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
 
     public void loadPasswords() {
-        if (mPasswordKeeper == null) return;
+        if (mPasswordKeeper == null || mDataLoaded) return;
 
         boolean success = false;
         try {
             mPasswordKeeper.loadPasswords();
             success = true;
+            mDataLoaded = true;
         } catch (NoSuchAlgorithmException |
                 IllegalBlockSizeException |
                 BadPaddingException |

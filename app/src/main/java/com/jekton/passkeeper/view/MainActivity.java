@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
 
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        PasswordManager.getInstance().setListener(null);
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
