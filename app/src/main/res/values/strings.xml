@@ -2,4 +2,10 @@
     <string name="app_name">PassKeeper</string>
 
     <string name="activity_main_menu_add">Add item</string>
+
+    <string name="activity_password_item_key">Key: </string>
+    <string name="activity_password_item_password">Password: </string>
+    <string name="activity_password_item_key_or_password_empty">Key or password is empty</string>
+    <string name="activity_password_item_menu_save">Save</string>
+    <string name="activity_password_item_menu_delete">Delete</string>
 </resources>

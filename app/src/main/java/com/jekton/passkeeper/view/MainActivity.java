@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     }
 
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_item) {
-            Log.e(TAG, "onOptionsItemSelected: ");
+            PasswordItemActivity.startActivity(this);
             return true;
         }
         return false;
