@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.jekton.passkeeper.util.log.MyDiskLogStrategy;
 import com.jekton.passkeeper.util.log.TimestampStrategy;
+import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.LogStrategy;
@@ -25,6 +26,7 @@ public class KeeperApplication extends Application {
 
 
     private void initLogger() {
+        Logger.addLogAdapter(new AndroidLogAdapter());
         LogStrategy logStrategy = TimestampStrategy.newBuilder()
                 .logStrategy(new MyDiskLogStrategy("passkeeper"))
                 .build();
