@@ -56,7 +56,10 @@ class PasswordKeeper {
         if (mPassword == null) return true;
 
         String data = encode();
-        boolean success = FileUtil.writeFile(mPasswordFile, data.getBytes(Charset.forName("UTF-8")));
+        byte[] encrypt = CipherUtil.encrypt(data.getBytes(Charset.forName("UTF-8")),
+                                            CipherParamsKeeper.getKey(mPassword),
+                                            CipherParamsKeeper.getIv());
+        boolean success = FileUtil.writeFile(mPasswordFile, encrypt);
         if (success) {
             mPasswords.clear();
             mListener.onPasswordChanged(mPasswords);
