@@ -34,6 +34,7 @@ class PasswordKeeper {
     private final String mPasswordFile;
     private final List<Pair<String, String>> mPasswords;
 
+    private boolean mModified;
     private String mPassword;
 
 
@@ -53,19 +54,24 @@ class PasswordKeeper {
             throws NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException,
             InvalidAlgorithmParameterException, NoSuchPaddingException {
-        if (mPassword == null) return true;
+        if (!mModified || mPassword == null) return true;
 
         String data = encode();
         byte[] encrypt = CipherUtil.encrypt(data.getBytes(Charset.forName("UTF-8")),
                                             CipherParamsKeeper.getKey(mPassword),
                                             CipherParamsKeeper.getIv());
-        return FileUtil.writeFile(mPasswordFile, encrypt);
+        boolean success = FileUtil.writeFile(mPasswordFile, encrypt);
+        if (success) {
+            mModified = false;
+        }
+        return success;
     }
 
 
     public void addPassword(String key, String password) {
         removePassword(key);
         mPasswords.add(new Pair<>(key, password));
+        mModified = true;
         mListener.onPasswordChanged(mPasswords);
     }
 
@@ -79,6 +85,7 @@ class PasswordKeeper {
         }
         if (index < mPasswords.size()) {
             mPasswords.remove(index);
+            mModified = true;
             mListener.onPasswordChanged(mPasswords);
             return true;
         } else {
