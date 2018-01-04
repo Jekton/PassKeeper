@@ -23,7 +23,7 @@ import javax.crypto.NoSuchPaddingException;
  * @author Jekton
  */
 
-public class PasswordKeeper {
+class PasswordKeeper {
 
     public interface OnPasswordChangedListener {
         void onPasswordChanged(List<Pair<String, String>> passwords);
@@ -31,36 +31,32 @@ public class PasswordKeeper {
 
 
     private final OnPasswordChangedListener mListener;
-    private final String mPassFile;
+    private final String mPasswordFile;
     private final List<Pair<String, String>> mPasswords;
 
     private String mPassword;
 
 
-    public PasswordKeeper(OnPasswordChangedListener listener, String passFile) {
+    public PasswordKeeper(OnPasswordChangedListener listener, String passwordFile) {
         mListener = listener;
-        mPassFile = passFile;
+        mPasswordFile = passwordFile;
         mPasswords = new ArrayList<>();
     }
 
 
-    public void setPassword(String password)
-            throws NoSuchPaddingException, NoSuchAlgorithmException,
-            IllegalBlockSizeException, BadPaddingException,
-            InvalidAlgorithmParameterException, InvalidKeyException {
+    public void setPassword(String password) {
         mPassword = password;
-        loadPassword();
     }
 
 
-    public boolean storePassword()
+    public boolean storePasswords()
             throws NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException,
             InvalidAlgorithmParameterException, NoSuchPaddingException {
         if (mPassword == null) return true;
 
         String data = encode();
-        boolean success = FileUtil.writeFile(mPassFile, data.getBytes(Charset.forName("UTF-8")));
+        boolean success = FileUtil.writeFile(mPasswordFile, data.getBytes(Charset.forName("UTF-8")));
         if (success) {
             mPasswords.clear();
             mListener.onPasswordChanged(mPasswords);
@@ -71,12 +67,13 @@ public class PasswordKeeper {
 
 
     public void addPassword(String key, String password) {
-        deletePassword(key);
+        removePassword(key);
         mPasswords.add(new Pair<>(key, password));
+        mListener.onPasswordChanged(mPasswords);
     }
 
 
-    public boolean deletePassword(String key) {
+    public boolean removePassword(String key) {
         int index;
         for (index = 0; index < mPasswords.size(); ++index) {
             if (mPasswords.get(index).first.equals(key)) {
@@ -85,6 +82,7 @@ public class PasswordKeeper {
         }
         if (index < mPasswords.size()) {
             mPasswords.remove(index);
+            mListener.onPasswordChanged(mPasswords);
             return true;
         } else {
             return false;
@@ -92,13 +90,13 @@ public class PasswordKeeper {
     }
 
 
-    private void loadPassword()
+    public void loadPasswords()
             throws NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException,
             InvalidAlgorithmParameterException, NoSuchPaddingException {
         if (mPassword == null) return;
 
-        byte[] data = FileUtil.readFile(mPassFile);
+        byte[] data = FileUtil.readFile(mPasswordFile);
         if (data.length == 0) {
             mListener.onPasswordChanged(mPasswords);
             return;
