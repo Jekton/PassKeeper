@@ -11,4 +11,10 @@
     <string name="activity_password_item_key_or_password_empty">Key or password is empty</string>
     <string name="activity_password_item_menu_save">Save</string>
     <string name="activity_password_item_menu_delete">Delete</string>
+
+
+    <string name="dialog_password_title_new_password">Create password</string>
+    <string name="dialog_password_title_input_password">Input password</string>
+    <string name="dialog_password_hint_password">password:</string>
+    <string name="dialog_password_msg_password_is_empty">Password should not be empty</string>
 </resources>
