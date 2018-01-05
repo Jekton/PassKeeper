@@ -2,7 +2,9 @@ package com.jekton.passkeeper.password;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.jekton.passkeeper.R;
@@ -142,11 +144,22 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
                 NoSuchPaddingException e) {
             Logger.e(e, "load password fail");
         }
-        if (mListener != null) {
-            if (success) {
+        if (success) {
+            if (mListener != null) {
                 mListener.onLoadPasswordSuccess();
-            } else {
+            }
+        } else {
+            if (mListener != null) {
                 mListener.onLoadPasswordFail();
+            } else {
+                // if we has just requested permission, mListener will be null this moment
+                Toast.makeText(mContext, R.string.password_msg_load_fail, Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.exit(0);
+                    }
+                }, 1000);
             }
         }
     }
