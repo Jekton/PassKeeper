@@ -10,7 +10,6 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 
 import com.jekton.passkeeper.R;
 import com.jekton.passkeeper.password.PasswordManager;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
         super.onResume();
         PasswordManager manager = PasswordManager.getInstance();
         if (!manager.isPasswordSet()) {
-            mPasswordDialog.show(manager.isFirstRound());
+            mPasswordDialog.show(manager.isFirstRound(this));
         }
     }
 
@@ -210,15 +208,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     private void onPermissionGranted() {
         PasswordManager manager = PasswordManager.getInstance();
         manager.setListener(this);
-        manager.setPassword("123456");
         manager.loadPasswords();
-//        manager.addPassword("foo", "123");
-//        manager.addPassword("bar", "876");
-//        manager.removePassword("foo");
-//        manager.addPassword("bar", "fdsfdsf");
-//        manager.addPassword("bar2", "fdsfdsf");
-//        manager.addPassword("bar3", "fdsfdsf");
-//        manager.storePasswords();
     }
 
 
@@ -229,6 +219,11 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
             return;
         }
 
-        // TODO: 04/01/2018
+        PasswordManager manager = PasswordManager.getInstance();
+        if (manager.isFirstRound(this)) {
+            manager.firstRoundEnd(this);
+        }
+        manager.setPassword(password);
+        onAuthenticated();
     }
 }

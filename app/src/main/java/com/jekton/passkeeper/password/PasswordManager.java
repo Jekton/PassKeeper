@@ -1,5 +1,6 @@
 package com.jekton.passkeeper.password;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.v4.util.Pair;
 
@@ -30,6 +31,7 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
     private static final String PASSWORD_FILE = "passkeeper.dat";
+    private static final String PREF_FIRST_ROUND = "PasswordManager.first_round";
 
     private static final PasswordManager sInstance = new PasswordManager();
 
@@ -52,8 +54,13 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
-    public boolean isFirstRound() {
-        return true;
+    public boolean isFirstRound(Context context) {
+        return PrefUtil.getBoolean(context, PREF_FIRST_ROUND, true);
+    }
+
+
+    public void firstRoundEnd(Context context) {
+        PrefUtil.setBoolean(context, PREF_FIRST_ROUND, false);
     }
 
 
