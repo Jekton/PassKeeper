@@ -3,7 +3,6 @@ package com.jekton.passkeeper.password;
 import android.content.Context;
 import android.os.Environment;
 import android.support.v4.util.Pair;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jekton.passkeeper.R;
@@ -65,7 +64,6 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
     public void onActivityIn() {
         if (++mNumActivity == 1) {
-            Log.e(TAG, "onActivityIn: init mPasswordKeeper");
             String path = Environment.getExternalStorageDirectory().getAbsolutePath();
             String passwordPath = path + File.separator + PASSWORD_FILE;
             mPasswordKeeper = new PasswordKeeper(this, passwordPath);
@@ -89,6 +87,9 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
             mPasswordKeeper = null;
             mPasswords = null;
             mDataLoaded = false;
+            if (mListener != null) {
+                mListener.onPasswordChanged(null);
+            }
         }
     }
 

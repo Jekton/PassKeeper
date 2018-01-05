@@ -47,6 +47,7 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
     protected void onResume() {
         super.onResume();
         PasswordManager manager = PasswordManager.getInstance();
+        manager.setListener(this);
         if (!manager.isPasswordSet()) {
             mPasswordDialog.show(manager.isFirstRound(this));
         }
@@ -178,7 +179,6 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
 
     private void onPermissionGranted() {
         PasswordManager manager = PasswordManager.getInstance();
-        manager.setListener(this);
         manager.loadPasswords();
     }
 
