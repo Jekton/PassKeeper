@@ -89,21 +89,30 @@ class PasswordKeeper {
     }
 
 
-    public void addPassword(String key, String password) {
-        removePassword(key);
-        mPasswords.add(new Pair<>(key, password));
-        mModified = true;
-        mListener.onPasswordChanged(mPasswords);
+    public boolean addPassword(String key, String password) {
+        if (findPassword(key) == null) {
+            mPasswords.add(new Pair<>(key, password));
+            mModified = true;
+            mListener.onPasswordChanged(mPasswords);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean updatePassword(String key, String password) {
+        int index = findPasswordIndex(key);
+        if (index < mPasswords.size()) {
+            mPasswords.set(index, new Pair<>(key, password));
+            mModified = true;
+            return true;
+        }
+        return false;
     }
 
 
     public boolean removePassword(String key) {
-        int index;
-        for (index = 0; index < mPasswords.size(); ++index) {
-            if (mPasswords.get(index).first.equals(key)) {
-                break;
-            }
-        }
+        int index = findPasswordIndex(key);
         if (index < mPasswords.size()) {
             mPasswords.remove(index);
             mModified = true;
@@ -167,5 +176,25 @@ class PasswordKeeper {
             builder.append(pair.second);
         }
         return builder.toString();
+    }
+
+
+    private int findPasswordIndex(String key) {
+        int index;
+        for (index = 0; index < mPasswords.size(); ++index) {
+            if (mPasswords.get(index).first.equals(key)) {
+                break;
+            }
+        }
+        return index;
+    }
+
+
+    private Pair<String, String> findPassword(String key) {
+        int index = findPasswordIndex(key);
+        if (index < mPasswords.size()) {
+            return mPasswords.get(index);
+        }
+        return null;
     }
 }

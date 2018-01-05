@@ -153,10 +153,13 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
-    public void addPassword(String key, String password) {
-        if (mPasswordKeeper != null) {
-            mPasswordKeeper.addPassword(key, password);
-        }
+    public boolean addPassword(String key, String password) {
+        return mPasswordKeeper != null && mPasswordKeeper.addPassword(key, password);
+    }
+
+
+    public boolean updatePassword(String key, String password) {
+        return mPasswordKeeper != null && mPasswordKeeper.updatePassword(key, password);
     }
 
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -89,7 +88,19 @@ public class PasswordItemActivity extends AbstractActivity {
                                    Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                PasswordManager.getInstance().addPassword(key, password);
+                if (mCreating) {
+                    if (!PasswordManager.getInstance().addPassword(key, password)) {
+                        Toast.makeText(this, R.string.activity_password_item_key_already_exist,
+                                       Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                } else {
+                    if (!PasswordManager.getInstance().updatePassword(key, password)) {
+                        Toast.makeText(this, R.string.activity_password_item_key_not_exist,
+                                       Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
                 break;
             default:
                 throw new UnsupportedOperationException();
