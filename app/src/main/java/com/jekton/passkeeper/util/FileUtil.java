@@ -50,6 +50,7 @@ public abstract class FileUtil {
         try {
             out = new FileOutputStream(path);
             out.write(data);
+            out.flush();
             return true;
         } catch (IOException e) {
             Logger.e(e, "Fail to write to file " + path);
