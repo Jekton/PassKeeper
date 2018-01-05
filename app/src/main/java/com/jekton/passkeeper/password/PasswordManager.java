@@ -31,9 +31,8 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
-
     private static final String TAG = "PasswordManager";
-    private static final String PASSWORD_FILE = "passkeeper.dat";
+    private static final String PASSWORD_FILE = "password-keeper.dat";
     private static final String PREF_FIRST_ROUND = "PasswordManager.first_round";
 
     private static final PasswordManager sInstance = new PasswordManager();
