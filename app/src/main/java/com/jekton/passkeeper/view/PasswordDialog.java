@@ -101,10 +101,12 @@ class PasswordDialog {
             mCallback.onPassword(password);
             hide();
         }
+        mPassword.setText("");
     }
 
 
     private void onCancel() {
+        mPassword.setText("");
         mCallback.onPassword("");
         hide();
     }
