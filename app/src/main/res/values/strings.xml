@@ -19,6 +19,7 @@
     <string name="dialog_password_title_input_password">Input password</string>
     <string name="dialog_password_hint_password">password:</string>
     <string name="dialog_password_msg_password_is_empty">Password should not be empty</string>
+    <string name="dialog_password_show_password">Show password</string>
 
     <string name="password_msg_store_fail">Fail to store passwords</string>
 </resources>

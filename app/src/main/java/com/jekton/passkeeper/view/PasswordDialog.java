@@ -6,7 +6,10 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,7 +32,6 @@ class PasswordDialog {
 
     private Dialog mDialog;
     private EditText mPassword;
-    private boolean mCreateNewOne;
 
 
     public PasswordDialog(Activity activity, PasswordCallback callback) {
@@ -39,7 +41,6 @@ class PasswordDialog {
 
 
     public void show(boolean createNewOne) {
-        mCreateNewOne = createNewOne;
         if (mDialog == null) {
             mDialog = new AlertDialog.Builder(mActivity)
                     .setView(R.layout.dialog_password)
@@ -71,6 +72,14 @@ class PasswordDialog {
                         }
                     });
                     mPassword = mDialog.findViewById(R.id.password);
+                    CheckBox checkBox = mDialog.findViewById(R.id.show_password);
+                    checkBox.setOnCheckedChangeListener(
+                            new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    setShowPassword(isChecked);
+                                }
+                            });
                 }
             });
         }
@@ -108,6 +117,16 @@ class PasswordDialog {
         mPassword.setText("");
         mCallback.onPassword("");
         hide();
+    }
+
+
+    private void setShowPassword(boolean show) {
+        int inputType = EditorInfo.TYPE_CLASS_TEXT;
+        inputType |= show ? EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                          : EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+        int cursor = mPassword.getSelectionStart();
+        mPassword.setInputType(inputType);
+        mPassword.setSelection(cursor);
     }
 
 
