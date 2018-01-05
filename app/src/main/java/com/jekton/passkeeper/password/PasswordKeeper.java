@@ -50,6 +50,11 @@ class PasswordKeeper {
     }
 
 
+    public boolean isPasswordSet() {
+        return mPassword != null;
+    }
+
+
     public boolean storePasswords()
             throws NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException,

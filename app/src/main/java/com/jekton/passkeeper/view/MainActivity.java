@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,11 +26,12 @@ import com.orhanobut.logger.Logger;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements PasswordManager.PasswordListener {
+public class MainActivity extends AppCompatActivity implements PasswordManager.PasswordListener, PasswordDialog.PasswordCallback {
     private static final String TAG = "MainActivity";
 
     private ListView mListView;
     private PasswordListAdapter mListAdapter;
+    private PasswordDialog mPasswordDialog;
 
     private List<Pair<String, String>> mPasswords;
     private boolean mStopped;
@@ -47,8 +49,9 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     @Override
     protected void onResume() {
         super.onResume();
-        if (checkPermission()) {
-            onPermissionGranted();
+        PasswordManager manager = PasswordManager.getInstance();
+        if (!manager.isPasswordSet()) {
+            mPasswordDialog.show(manager.isFirstRound());
         }
     }
 
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
 
 
     private void init() {
+        mPasswordDialog = new PasswordDialog(this, this);
         mListView = findViewById(R.id.password_list);
         mListAdapter = new PasswordListAdapter(this);
         mListView.setAdapter(mListAdapter);
@@ -145,6 +149,13 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
     public void onStorePasswordFail() {
         Toast.makeText(this, R.string.activity_main_msg_store_fail,
                 Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void onAuthenticated() {
+        if (checkPermission()) {
+            onPermissionGranted();
+        }
     }
 
 
@@ -208,5 +219,16 @@ public class MainActivity extends AppCompatActivity implements PasswordManager.P
 //        manager.addPassword("bar2", "fdsfdsf");
 //        manager.addPassword("bar3", "fdsfdsf");
 //        manager.storePasswords();
+    }
+
+
+    @Override
+    public void onPassword(String password) {
+        if (TextUtils.isEmpty(password)) {
+            finish();
+            return;
+        }
+
+        // TODO: 04/01/2018
     }
 }

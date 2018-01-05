@@ -52,10 +52,23 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
+    public boolean isFirstRound() {
+        return true;
+    }
+
+
     public void setPassword(String password) {
         if (mPasswordKeeper != null) {
             mPasswordKeeper.setPassword(password);
         }
+    }
+
+
+    public boolean isPasswordSet() {
+        if (mPasswordKeeper != null) {
+            return mPasswordKeeper.isPasswordSet();
+        }
+        return false;
     }
 
 
