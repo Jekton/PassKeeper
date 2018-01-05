@@ -46,6 +46,12 @@ class PasswordKeeper {
     }
 
 
+    public void destroy() {
+        mPassword = null;
+        mPasswords.clear();
+    }
+
+
     public String getPasswordFile() {
         return mPasswordFile;
     }

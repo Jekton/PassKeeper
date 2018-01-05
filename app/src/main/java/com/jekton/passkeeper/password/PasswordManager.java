@@ -41,6 +41,8 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     private boolean mDataLoaded;
     private List<Pair<String, String>> mPasswords;
 
+    private int mNumActivity;
+
 
     public static PasswordManager getInstance() {
         return sInstance;
@@ -48,9 +50,23 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
 
     private PasswordManager() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String passwordPath = path + File.separator + PASSWORD_FILE;
-        mPasswordKeeper = new PasswordKeeper(this, passwordPath);
+    }
+
+
+    public void onActivityIn() {
+        if (++mNumActivity == 1) {
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String passwordPath = path + File.separator + PASSWORD_FILE;
+            mPasswordKeeper = new PasswordKeeper(this, passwordPath);
+        }
+    }
+
+
+    public void onActivityOut() {
+        if (--mNumActivity == 0) {
+            mPasswordKeeper.destroy();
+            mPasswordKeeper = null;
+        }
     }
 
 
@@ -113,6 +129,7 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
+    // TODO: 1/5/18  don't call me on MainActivity
     public void storePasswords() {
         if (mPasswordKeeper == null) return;
 

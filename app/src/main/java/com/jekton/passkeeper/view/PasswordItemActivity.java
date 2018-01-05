@@ -21,7 +21,7 @@ import com.jekton.passkeeper.password.PasswordManager;
  * @author Jekton
  */
 
-public class PasswordItemActivity extends AppCompatActivity {
+public class PasswordItemActivity extends AbstractActivity {
 
     private static final String EXTRA_CREATE = "create";
     private static final String EXTRA_KEY = "key";

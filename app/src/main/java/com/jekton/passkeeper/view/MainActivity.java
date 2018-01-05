@@ -24,7 +24,7 @@ import com.jekton.passkeeper.password.PasswordManager;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements PasswordManager.PasswordListener, PasswordDialog.PasswordCallback {
+public class MainActivity extends AbstractActivity implements PasswordManager.PasswordListener, PasswordDialog.PasswordCallback {
     private static final String TAG = "MainActivity";
 
     private ListView mListView;
