@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PassKeeper</string>
+    <string name="app_name">PasswordsKeeper</string>
 
     <string name="activity_main_menu_add">Add item</string>
     <string name="activity_main_msg_load_fail">Fail to load passwords</string>

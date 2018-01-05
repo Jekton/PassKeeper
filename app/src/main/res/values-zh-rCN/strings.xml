@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">密码管家</string>
+
+    <string name="activity_main_menu_add">添加密码</string>
+    <string name="activity_main_msg_load_fail">加载密码失败</string>
+    <string name="activity_main_msg_decode_fail">解析密码本失败</string>
+
+
+    <string name="activity_password_item_key">名字：</string>
+    <string name="activity_password_item_password">密码：</string>
+    <string name="activity_password_item_key_or_password_empty">名字或密码为空</string>
+    <string name="activity_password_item_key_not_exist">名字不存在</string>
+    <string name="activity_password_item_key_already_exist">名字已存在</string>
+    <string name="activity_password_item_menu_save">保存</string>
+    <string name="activity_password_item_menu_delete">删除</string>
+
+
+    <string name="dialog_password_title_new_password">创建新密码</string>
+    <string name="dialog_password_title_input_password">输入密码</string>
+    <string name="dialog_password_hint_password">密码：</string>
+    <string name="dialog_password_msg_password_is_empty">密码不能为空</string>
+
+    <string name="password_msg_store_fail">保存密码失败</string>
+</resources>
