@@ -26,9 +26,13 @@ import javax.crypto.NoSuchPaddingException;
 class PasswordKeeper {
 
     public interface OnPasswordChangedListener {
+        void onDecodeFail();
         void onPasswordChanged(List<Pair<String, String>> passwords);
     }
 
+
+    private static final String TAG = "PasswordKeeper";
+    private final String MAGIC = "PassKeeper";
     private final String STORED_PASSWORD_SEPARATOR = "\r\n";
 
     private final OnPasswordChangedListener mListener;
@@ -132,14 +136,21 @@ class PasswordKeeper {
 
     private void decode(byte[] data) {
         String str = new String(data, Charset.forName("UTF-8"));
+        str = str.trim();
         String[] passwords = str.split(STORED_PASSWORD_SEPARATOR);
-        if (passwords.length % 2 != 0) {
+        if (passwords.length % 2 != 1) {
             Logger.e("Password data corrupted");
+            mListener.onDecodeFail();
+            return;
+        }
+        if (!passwords[0].equals(MAGIC)) {
+            Logger.e("Unexpected magic, expect " + MAGIC + ", but got " + passwords[0]);
+            mListener.onDecodeFail();
             return;
         }
 
         mPasswords.clear();
-        for (int i = 0; i < passwords.length; i += 2) {
+        for (int i = 1; i < passwords.length; i += 2) {
             Pair<String, String> pair = new Pair<>(passwords[i], passwords[i + 1]);
             mPasswords.add(pair);
         }
@@ -148,15 +159,11 @@ class PasswordKeeper {
 
     private String encode() {
         StringBuilder builder = new StringBuilder();
-        boolean first = true;
+        builder.append(MAGIC);
         for (Pair<String, String> pair : mPasswords) {
-            if (!first) {
-                builder.append(STORED_PASSWORD_SEPARATOR);
-            } else {
-                first = false;
-            }
+            builder.append(STORED_PASSWORD_SEPARATOR);
             builder.append(pair.first);
-            builder.append('\n');
+            builder.append(STORED_PASSWORD_SEPARATOR);
             builder.append(pair.second);
         }
         return builder.toString();

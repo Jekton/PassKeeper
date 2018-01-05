@@ -51,7 +51,7 @@ public class CipherUtil {
 
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
-        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
         cipher.init(mode, keySpec, ivSpec);
         return cipher.doFinal(data);

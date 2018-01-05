@@ -176,6 +176,14 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
 
     @Override
+    public void onDecodeFail() {
+        if (mListener != null) {
+            mListener.onDecodeFail();
+        }
+    }
+
+
+    @Override
     public void onPasswordChanged(List<Pair<String, String>> passwords) {
         mPasswords = passwords;
         if (mListener != null) {
