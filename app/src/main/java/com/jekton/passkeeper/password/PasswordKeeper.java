@@ -29,6 +29,7 @@ class PasswordKeeper {
         void onPasswordChanged(List<Pair<String, String>> passwords);
     }
 
+    private final String STORED_PASSWORD_SEPARATOR = "\r\n";
 
     private final OnPasswordChangedListener mListener;
     private final String mPasswordFile;
@@ -125,7 +126,7 @@ class PasswordKeeper {
 
     private void decode(byte[] data) {
         String str = new String(data, Charset.forName("UTF-8"));
-        String[] passwords = str.split("\n");
+        String[] passwords = str.split(STORED_PASSWORD_SEPARATOR);
         if (passwords.length % 2 != 0) {
             Logger.e("Password data corrupted");
             return;
@@ -144,7 +145,7 @@ class PasswordKeeper {
         boolean first = true;
         for (Pair<String, String> pair : mPasswords) {
             if (!first) {
-                builder.append('\n');
+                builder.append(STORED_PASSWORD_SEPARATOR);
             } else {
                 first = false;
             }
