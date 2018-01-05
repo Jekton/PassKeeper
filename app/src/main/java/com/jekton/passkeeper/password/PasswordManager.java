@@ -55,7 +55,15 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
 
     public boolean isFirstRound(Context context) {
-        return PrefUtil.getBoolean(context, PREF_FIRST_ROUND, true);
+        boolean firstRound = PrefUtil.getBoolean(context, PREF_FIRST_ROUND, true);
+        if (firstRound) {
+            File file = new File(mPasswordKeeper.getPasswordFile());
+            if (file.exists()) {
+                firstRoundEnd(context);
+                return false;
+            }
+        }
+        return firstRound;
     }
 
 

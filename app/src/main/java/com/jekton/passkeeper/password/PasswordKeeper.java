@@ -45,6 +45,11 @@ class PasswordKeeper {
     }
 
 
+    public String getPasswordFile() {
+        return mPasswordFile;
+    }
+
+
     public void setPassword(String password) {
         mPassword = password;
     }
