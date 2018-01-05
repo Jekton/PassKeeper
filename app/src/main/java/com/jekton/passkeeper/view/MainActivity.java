@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +32,6 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
     private PasswordDialog mPasswordDialog;
 
     private List<Pair<String, String>> mPasswords;
-    private boolean mStopped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,27 +57,6 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
     protected void onPause() {
         super.onPause();
         PasswordManager.getInstance().setListener(null);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        PasswordManager.getInstance().storePasswords();
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mStopped = false;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mStopped = true;
-        PasswordManager.getInstance().storePasswords();
     }
 
 
@@ -123,6 +101,14 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
 
 
     @Override
+    public void onDecodeFail() {
+        Log.e(TAG, "onDecodeFail: ");
+        Toast.makeText(this, R.string.activity_main_msg_decode_fail, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
+    @Override
     public void onLoadPasswordSuccess() {
         // nop
     }
@@ -131,21 +117,6 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
     @Override
     public void onLoadPasswordFail() {
         Toast.makeText(this, R.string.activity_main_msg_load_fail,
-                Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public void onStorePasswordSuccess() {
-        if (mStopped) {
-            System.exit(0);
-        }
-    }
-
-
-    @Override
-    public void onStorePasswordFail() {
-        Toast.makeText(this, R.string.activity_main_msg_store_fail,
                 Toast.LENGTH_SHORT).show();
     }
 

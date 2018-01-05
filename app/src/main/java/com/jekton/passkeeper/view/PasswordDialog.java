@@ -87,7 +87,7 @@ class PasswordDialog {
 
     public void hide() {
         if (mDialog != null && mDialog.isShowing()) {
-            mDialog.hide();
+            mDialog.dismiss();
         }
     }
 
@@ -97,7 +97,6 @@ class PasswordDialog {
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(mActivity, R.string.dialog_password_msg_password_is_empty,
                     Toast.LENGTH_SHORT).show();
-            mDialog.show();
         } else {
             mCallback.onPassword(password);
             hide();

@@ -3,7 +3,10 @@ package com.jekton.passkeeper.password;
 import android.content.Context;
 import android.os.Environment;
 import android.support.v4.util.Pair;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.jekton.passkeeper.R;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -26,15 +29,17 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     public interface PasswordListener extends PasswordKeeper.OnPasswordChangedListener {
         void onLoadPasswordSuccess();
         void onLoadPasswordFail();
-        void onStorePasswordSuccess();
-        void onStorePasswordFail();
     }
 
+
+
+    private static final String TAG = "PasswordManager";
     private static final String PASSWORD_FILE = "passkeeper.dat";
     private static final String PREF_FIRST_ROUND = "PasswordManager.first_round";
 
     private static final PasswordManager sInstance = new PasswordManager();
 
+    private Context mContext;
     private PasswordKeeper mPasswordKeeper;
     private PasswordListener mListener;
 
@@ -53,8 +58,14 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
     }
 
 
+    public void setContext(Context context) {
+        mContext = context;
+    }
+
+
     public void onActivityIn() {
         if (++mNumActivity == 1) {
+            Log.e(TAG, "onActivityIn: init mPasswordKeeper");
             String path = Environment.getExternalStorageDirectory().getAbsolutePath();
             String passwordPath = path + File.separator + PASSWORD_FILE;
             mPasswordKeeper = new PasswordKeeper(this, passwordPath);
@@ -64,8 +75,20 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
 
     public void onActivityOut() {
         if (--mNumActivity == 0) {
+            try {
+                mPasswordKeeper.storePasswords();
+            } catch (NoSuchAlgorithmException | IllegalBlockSizeException |
+                    InvalidKeyException | InvalidAlgorithmParameterException |
+                    BadPaddingException | NoSuchPaddingException e) {
+                if (mContext != null) {
+                    Toast.makeText(mContext, R.string.password_msg_store_fail,
+                                   Toast.LENGTH_SHORT).show();
+                }
+            }
             mPasswordKeeper.destroy();
             mPasswordKeeper = null;
+            mPasswords = null;
+            mDataLoaded = false;
         }
     }
 
@@ -124,32 +147,6 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
                 mListener.onLoadPasswordSuccess();
             } else {
                 mListener.onLoadPasswordFail();
-            }
-        }
-    }
-
-
-    // TODO: 1/5/18  don't call me on MainActivity
-    public void storePasswords() {
-        if (mPasswordKeeper == null) return;
-
-        boolean success = false;
-        try {
-            success = mPasswordKeeper.storePasswords();
-        } catch (NoSuchAlgorithmException |
-                IllegalBlockSizeException |
-                BadPaddingException |
-                InvalidKeyException |
-                InvalidAlgorithmParameterException |
-                NoSuchPaddingException e) {
-            Logger.e(e, "store password fail");
-        }
-        if (mListener != null) {
-            if (success) {
-                mListener.onStorePasswordSuccess();
-            } else {
-                mListener.onStorePasswordFail();
-                // FIXME: 04/01/2018 what should we do?
             }
         }
     }

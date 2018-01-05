@@ -2,6 +2,7 @@ package com.jekton.passkeeper;
 
 import android.app.Application;
 
+import com.jekton.passkeeper.password.PasswordManager;
 import com.jekton.passkeeper.util.log.MyDiskLogStrategy;
 import com.jekton.passkeeper.util.log.TimestampStrategy;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -22,6 +23,7 @@ public class KeeperApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initLogger();
+        PasswordManager.getInstance().setContext(this);
     }
 
 
