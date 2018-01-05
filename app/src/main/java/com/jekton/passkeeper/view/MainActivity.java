@@ -103,7 +103,6 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
 
     @Override
     public void onDecodeFail() {
-        Log.e(TAG, "onDecodeFail: ");
         Toast.makeText(this, R.string.activity_main_msg_decode_fail, Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -119,6 +118,7 @@ public class MainActivity extends AbstractActivity implements PasswordManager.Pa
     public void onLoadPasswordFail() {
         Toast.makeText(this, R.string.activity_main_msg_load_fail,
                 Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 
