@@ -2,5 +2,6 @@
 <resources>
     <dimen name="activity_default_margin">16dp</dimen>
 
+    <dimen name="activity_main_list_item_margin">8dp</dimen>
     <dimen name="activity_password_item_key_margin">8dp</dimen>
 </resources>
