@@ -32,6 +32,12 @@ Note: While generate your own IV and salt, make sure that you
 use the same params persistently.
 
 
+Port to other platforms
+-----------------------
+Password data format can be found in [here][4]
+
+
+
 License
 -------
     Copyright (c) 2018 Jekton
@@ -60,3 +66,4 @@ License
 [1]: https://github.com/Jekton/PasswordsKeeper/releases
 [2]: https://github.com/Jekton/PasswordsKeeper/blob/master/app/KeyGen.java
 [3]: https://github.com/Jekton/PasswordsKeeper/blob/master/app/src/main/cpp/cipher_params_keeper.cpp
+[4]: https://github.com/Jekton/PasswordsKeeper/blob/master/doc/data-format.md
