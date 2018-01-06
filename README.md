@@ -28,7 +28,7 @@ the corresponding values in [cipher_params_keeper.cpp][3]
 You can use a single seek to generate 32 bytes data or use two
 seeks to generate IV and salt separately.
 
-Note: While generate your own IV and salt, make sure that you
+Note: While generating your own IV and salt, make sure that you
 use the same params persistently.
 
 
