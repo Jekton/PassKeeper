@@ -6,17 +6,18 @@ import java.util.Random;
 public class KeyGen {
 
     public static void main(String[] args) {
-        for (String arg : args) {
-            System.out.println();
-            generate(Integer.parseInt(arg));
-            System.out.println();
+        if (args.length != 2) {
+            System.err.println("Usage: java KeyGen [seek] [nbytes]");
+            return;
         }
+        System.out.println();
+        generate(Long.parseLong(args[0]), Integer.parseInt(args[1]));
+        System.out.println();
     }
 
-    private static void generate(int nbytes) {
+    private static void generate(long seek, int nbytes) {
         byte[] bytes = new byte[nbytes];
-        // TODO put your seek
-        Random random = new Random();
+        Random random = new Random(seek);
         random.nextBytes(bytes);
         printBytes(bytes);
     }
