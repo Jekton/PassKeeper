@@ -10,6 +10,8 @@ Feature
 1. Add/delete/update password item
 2. Offline backup
 
+Note: password data is located in `/sdcard/password-keeper.dat`
+
 
 Download
 --------
