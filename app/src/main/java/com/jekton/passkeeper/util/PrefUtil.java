@@ -1,4 +1,4 @@
-package com.jekton.passkeeper.password;
+package com.jekton.passkeeper.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
  * @author Jekton
  */
 
-abstract class PrefUtil {
+public abstract class PrefUtil {
 
     private static final String PREF = "default_pref";
 

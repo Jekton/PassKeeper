@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.util.Pair;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jekton.passkeeper.R;
+import com.jekton.passkeeper.util.PrefUtil;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
