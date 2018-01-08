@@ -1,7 +1,7 @@
 //
 // Created by Jekton Luo on 1/4/18.
 //
-#include "com_jekton_passkeeper_password_CipherParamsKeeper.h"
+#include "com_jekton_passkeeper_password_params_InternalParamsProvider.h"
 
 const uint8_t sIv[] = {
         (uint8_t) 0x9b, (uint8_t) 0x6f, (uint8_t) 0xe6, (uint8_t) 0x18,
@@ -24,16 +24,16 @@ jbyteArray makeCopy(JNIEnv *env, const uint8_t *src, size_t len);
 
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_jekton_passkeeper_password_CipherParamsKeeper_getIv(
-        JNIEnv *env, jclass) {
+Java_com_jekton_passkeeper_password_params_InternalParamsProvider_doGetIv(
+        JNIEnv *env, jobject) {
     size_t len = sizeof(sIv) / sizeof(*sIv);
     return makeCopy(env, sIv, len);
 }
 
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_jekton_passkeeper_password_CipherParamsKeeper_getSalt(
-        JNIEnv *env, jclass) {
+Java_com_jekton_passkeeper_password_params_InternalParamsProvider_getSalt(
+        JNIEnv *env, jobject) {
     size_t len = sizeof(sSalt) / sizeof(*sSalt);
     return makeCopy(env, sSalt, len);
 }

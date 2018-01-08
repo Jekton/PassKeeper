@@ -1,10 +1,27 @@
 package com.jekton.passkeeper.password.params;
 
+import com.jekton.passkeeper.util.CipherUtil;
+import com.orhanobut.logger.Logger;
+
+import java.security.NoSuchAlgorithmException;
+
+
 /**
  * @author Jekton
  */
 
 class InternalParamsProvider implements CipherParamsProvider {
+
+    static {
+        System.loadLibrary("pwdkeeper");
+    }
+
+
+    @Override
+    public boolean useExternalKey() {
+        throw new UnsupportedOperationException();
+    }
+
 
     @Override
     public void setExternalKey(boolean uesExternalKey) {
@@ -14,12 +31,21 @@ class InternalParamsProvider implements CipherParamsProvider {
 
     @Override
     public byte[] getIv() {
-        return new byte[0];
+        return doGetIv();
     }
 
 
     @Override
     public byte[] getKey(String password) {
-        return new byte[0];
+        try {
+            return CipherUtil.md5Bytes(password, getSalt());
+        } catch (NoSuchAlgorithmException e) {
+            Logger.e(e, "Fail to make key");
+            throw new RuntimeException(e);
+        }
     }
+
+
+    private native byte[] doGetIv();
+    private native byte[] getSalt();
 }

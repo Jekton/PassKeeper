@@ -1,8 +1,11 @@
 package com.jekton.passkeeper.password;
 
 
+import android.content.Context;
 import android.support.v4.util.Pair;
 
+import com.jekton.passkeeper.password.params.CipherParamsProvider;
+import com.jekton.passkeeper.password.params.CipherParamsProviderImpl;
 import com.jekton.passkeeper.util.CipherUtil;
 import com.jekton.passkeeper.util.FileUtil;
 import com.orhanobut.logger.Logger;
@@ -39,14 +42,17 @@ class PasswordKeeper {
     private final String mPasswordFile;
     private final List<Pair<String, String>> mPasswords;
 
+    private final CipherParamsProvider mCipherParamsProvider;
+
     private boolean mModified;
     private String mPassword;
 
 
-    public PasswordKeeper(OnPasswordChangedListener listener, String passwordFile) {
+    public PasswordKeeper(Context context, OnPasswordChangedListener listener, String passwordFile) {
         mListener = listener;
         mPasswordFile = passwordFile;
         mPasswords = new ArrayList<>();
+        mCipherParamsProvider = new CipherParamsProviderImpl(context);
     }
 
 
@@ -79,8 +85,8 @@ class PasswordKeeper {
 
         String data = encode();
         byte[] encrypt = CipherUtil.encrypt(data.getBytes(Charset.forName("UTF-8")),
-                                            CipherParamsKeeper.getKey(mPassword),
-                                            CipherParamsKeeper.getIv());
+                                            mCipherParamsProvider.getKey(mPassword),
+                                            mCipherParamsProvider.getIv());
         boolean success = FileUtil.writeFile(mPasswordFile, encrypt);
         if (success) {
             mModified = false;
@@ -136,8 +142,8 @@ class PasswordKeeper {
             return;
         }
 
-        byte[] key = CipherParamsKeeper.getKey(mPassword);
-        byte[] decrypted = CipherUtil.decrypt(data, key, CipherParamsKeeper.getIv());
+        byte[] key = mCipherParamsProvider.getKey(mPassword);
+        byte[] decrypted = CipherUtil.decrypt(data, key, mCipherParamsProvider.getIv());
         decode(decrypted);
         mListener.onPasswordChanged(mPasswords);
     }

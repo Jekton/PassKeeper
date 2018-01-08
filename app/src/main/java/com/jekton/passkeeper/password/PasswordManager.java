@@ -67,7 +67,7 @@ public class PasswordManager implements PasswordKeeper.OnPasswordChangedListener
         if (++mNumActivity == 1) {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath();
             String passwordPath = path + File.separator + PASSWORD_FILE;
-            mPasswordKeeper = new PasswordKeeper(this, passwordPath);
+            mPasswordKeeper = new PasswordKeeper(mContext, this, passwordPath);
         }
     }
 
