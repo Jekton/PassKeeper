@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 
 /**
@@ -54,6 +55,7 @@ public abstract class FileUtil {
             return true;
         } catch (IOException e) {
             Logger.e(e, "Fail to write to file " + path);
+            deleteFile(path);
             return false;
         } finally {
             silentlyClose(out);
@@ -69,5 +71,11 @@ public abstract class FileUtil {
                 Logger.e(e, "Fail to close Closeable");
             }
         }
+    }
+
+
+    public static boolean deleteFile(String path) {
+        File file = new File(path);
+        return file.delete();
     }
 }
